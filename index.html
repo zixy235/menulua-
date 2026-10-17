@@ -1231,6 +1231,17 @@ window.addEventListener("message", (event) => {
         document.documentElement.style.setProperty("--menu-y", y);
     }
 });
+// DUI message bridge: parse JSON strings from SendDuiMessage
+window.addEventListener("message", (event) => {
+    if (typeof event.data === "string") {
+        try {
+            const parsed = JSON.parse(event.data);
+            event.stopImmediatePropagation();
+            window.dispatchEvent(new MessageEvent("message", {data: parsed, origin: event.origin}));
+        } catch(e) {}
+        return;
+    }
+}, true);
 // NUI keyboard bridge: Lua sends nuiKey messages instead of keyboard focus
 window.addEventListener("message", (event) => {
     const data = event.data;
