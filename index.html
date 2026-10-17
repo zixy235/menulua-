@@ -1231,6 +1231,26 @@ window.addEventListener("message", (event) => {
         document.documentElement.style.setProperty("--menu-y", y);
     }
 });
+// NUI keyboard bridge: Lua sends nuiKey messages instead of keyboard focus
+window.addEventListener("message", (event) => {
+    const data = event.data;
+    if (!data || data.action !== "nuiKey") return;
+    const keyMap = {
+        navUp: "ArrowUp",
+        navDown: "ArrowDown",
+        navLeft: "ArrowLeft",
+        navRight: "ArrowRight",
+        confirm: "Enter",
+        back: "Backspace",
+        "delete": "Delete",
+        qLeft: "q",
+        eRight: "e"
+    };
+    const key = keyMap[data.key];
+    if (key) {
+        window.dispatchEvent(new KeyboardEvent("keydown", { key: key, bubbles: true }));
+    }
+});
     function tp(e, t) {
     for (var n = 0; n < t.length; n++) {
         const r = t[n];
